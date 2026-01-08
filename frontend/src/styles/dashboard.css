@@ -1,0 +1,22 @@
+.dashboard-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 18px;
+}
