@@ -5,8 +5,14 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import testRoutes from "./routes/test.routes.js";
 import publicPaymentRoutes from "./routes/payments.public.routes.js";
+import cors from "cors";
 
 export const app = express();
+app.use(
+  cors({
+    origin: "*"
+  })
+);
 app.use(express.json());
 
 app.get("/health", async (req, res) => {
