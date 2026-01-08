@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../services/api";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -83,6 +84,13 @@ export default function Dashboard() {
         <div data-test-id="success-rate">
           {stats.successRate}%
         </div>
+      </div>
+
+      {/* 🔹 OPTIONAL NAVIGATION LINK */}
+      <div style={{ marginTop: "20px" }}>
+        <Link to="/dashboard/transactions">
+          View Transactions
+        </Link>
       </div>
     </div>
   );
