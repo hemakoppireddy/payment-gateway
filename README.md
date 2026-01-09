@@ -57,6 +57,11 @@ docker-compose up -d --build
 | Backend API | http://localhost:8000 |
 | Health Check | http://localhost:8000/health |
 
+
+## Demo Video : 
+
+    https://drive.google.com/file/d/1NAmMGV83_8jjIghB_ERCGBP0GP8DvpEa/view?usp=sharing
+
 ---
 
 ## Test Merchant Credentials
@@ -160,10 +165,8 @@ Stores merchants, orders, payments, and related metadata with proper relationshi
 
 ## Architecture Diagrams
 
-*(To be added)*
-
-- System Architecture Diagram  
-- Database ER Diagram  
+* [System Architecture](docs/images/architecture.png)
+* [Database ERD](docs/images/erd.png)
 
 ---
 
