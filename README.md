@@ -60,7 +60,7 @@ docker-compose up -d --build
 
 ## Demo Video : 
 
-    https://drive.google.com/file/d/1NAmMGV83_8jjIghB_ERCGBP0GP8DvpEa/view?usp=sharing
+    https://drive.google.com/file/d/1qnAQA95StjVnTD4pBCNtRbydoR7L8rI5/view?usp=sharing
 
 ---
 
