@@ -93,14 +93,14 @@ Name: Test User
 
 ## Project Structure
 
+```text
 ├── backend/            # Node.js + Express API
 ├── frontend/           # Merchant Dashboard (React)
 ├── checkout-page/      # Hosted Checkout (React)
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
-
-
+```
 
 ---
 
@@ -211,11 +211,13 @@ To force all payments to fail (for demo or evaluation):
 ```env
 TEST_MODE=true
 TEST_PAYMENT_SUCCESS=false
+```
 
 Restart only the backend service:
 
 ```bash
 docker-compose restart api
+```
 
 ## Health Check
 
@@ -223,6 +225,7 @@ Verify backend readiness:
 
 ```bash
 curl http://localhost:8000/health
+```
 
 Expected response:
 
