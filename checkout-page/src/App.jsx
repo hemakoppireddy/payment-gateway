@@ -9,7 +9,7 @@ export default function App() {
     <Routes>
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout/success" element={<Success />} />
-      <Route path="/checkout/failure" element={<Failure />} />
+      <Route path="/failure" element={<Failure />} />
     </Routes>
   );
 }

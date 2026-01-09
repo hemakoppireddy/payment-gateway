@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -23,13 +23,37 @@ services:
     ports:
       - "8000:8000"
     environment:
-       DATABASE_URL: postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
-       PORT: 8000
+      DATABASE_URL: postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
+      PORT: 8000
 
-       TEST_MERCHANT_EMAIL: test@example.com
-       TEST_API_KEY: key_test_abc123
-       TEST_API_SECRET: secret_test_xyz789
+      # Test merchant (required by assignment)
+      TEST_MERCHANT_EMAIL: test@example.com
+      TEST_API_KEY: key_test_abc123
+      TEST_API_SECRET: secret_test_xyz789
+
+      # Payment test mode (optional, can toggle)
+      TEST_MODE: "false"
+      TEST_PAYMENT_SUCCESS: "true"
+      TEST_PROCESSING_DELAY: "1000"
 
     depends_on:
       postgres:
         condition: service_healthy
+
+  dashboard:
+    build:
+      context: ./frontend
+    container_name: gateway_dashboard
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  checkout:
+    build:
+      context: ./checkout-page
+    container_name: gateway_checkout
+    ports:
+      - "3001:80"
+    depends_on:
+      - api

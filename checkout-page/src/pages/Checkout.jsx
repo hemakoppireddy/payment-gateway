@@ -105,7 +105,7 @@ export default function Checkout() {
   setError("");
 
   const rawNumber = e.target.number.value;
-  const cleanedNumber = rawNumber.replace(/\s+/g, ""); // ✅ FIX
+  const cleanedNumber = rawNumber.replace(/\s+/g, ""); 
 
   const [month, year] = e.target.expiry.value.split("/");
   const fullYear =
@@ -120,7 +120,7 @@ export default function Checkout() {
           order_id: orderId,
           method: "card",
           card: {
-            number: cleanedNumber,          // ✅ IMPORTANT
+            number: cleanedNumber,      
             expiry_month: month,
             expiry_year: fullYear,
             cvv: e.target.cvv.value,

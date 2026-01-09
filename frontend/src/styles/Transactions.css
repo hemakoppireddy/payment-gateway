@@ -1,15 +1,14 @@
 /* ===== PAGE ===== */
-.transactions-page {
-  min-height: 100vh;
-  background: #f2f4f7;
-  padding: 40px 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+html,
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
 }
+
 .transactions-page {
-  min-height: 100vh;
   background: #f2f4f7;
   padding: 24px 16px;
-  overflow-x: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
