@@ -160,12 +160,10 @@ button[type="submit"] {
   color: #6b7280;
 }
 
-/* ===== FAILURE ===== */
 .result-card.failure h2 {
   color: #b91c1c;
 }
 
-/* Cross Icon */
 .failure-icon {
   width: 56px;
   height: 56px;
@@ -180,7 +178,6 @@ button[type="submit"] {
   justify-content: center;
 }
 
-/* Retry Button */
 .retry-btn {
   margin-top: 20px;
   padding: 10px 16px;

@@ -18,7 +18,6 @@ export default function Checkout() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
-  /* 🔹 Fetch order (PUBLIC endpoint – correct) */
   useEffect(() => {
     async function fetchOrder() {
       try {
@@ -34,7 +33,6 @@ export default function Checkout() {
     fetchOrder();
   }, [orderId]);
 
-  /* 🔹 Poll payment status */
   function pollPayment(paymentId) {
     const interval = setInterval(async () => {
       try {
@@ -72,7 +70,7 @@ export default function Checkout() {
     }, 2000);
   }
 
-  /* 🔹 UPI Payment */
+  /* UPI Payment */
   async function handleUPIPay(e) {
     e.preventDefault();
     setStatus("processing");
@@ -98,7 +96,7 @@ export default function Checkout() {
     }
   }
 
-  /* 🔹 Card Payment */
+  /* Card Payment */
   async function handleCardPay(e) {
   e.preventDefault();
   setStatus("processing");
@@ -148,7 +146,6 @@ export default function Checkout() {
   return (
     <div data-test-id="checkout-container">
       <div className="checkout-card">
-        {/* Order Summary */}
         <div data-test-id="order-summary">
           <h2>Complete Payment</h2>
 
