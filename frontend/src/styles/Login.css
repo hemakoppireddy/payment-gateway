@@ -1,66 +1,105 @@
-/* Full page background */
+/* ===== RESET SCROLLING ===== */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; 
+}
+
+/* ===== PAGE WRAPPER ===== */
 .login-page {
-  min-height: 100vh;
-  background: #f5f7fb;
+  width: 100vw;
+  height: 100vh;
+  background: #eef1f4;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Login card */
+/* ===== CARD ===== */
 .login-card {
+  width: 100%;
+  max-width: 420px;
   background: #ffffff;
-  padding: 32px;
-  width: 100%;
-  max-width: 400px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 36px 34px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* Title */
-.login-card h2 {
+/* ===== HEADER ===== */
+.login-header {
+  margin-bottom: 28px;
+}
+
+.login-header h1 {
   margin: 0;
-  text-align: center;
-  color: #111827;
+  font-size: 24px;
+  font-weight: 700;
+  /* color: #1e293b; */
+  color: #914c84;
 }
 
-/* Subtitle */
-.subtitle {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 24px;
+.login-header p {
+  margin-top: 6px;
   font-size: 14px;
+  color: #64748b;
 }
 
-/* Inputs */
-.login-card input {
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
+/* ===== FORM FIELDS ===== */
+.form-field {
+  margin-bottom: 20px;
+  margin-right: 20px;
 }
 
-.login-card input:focus {
-  outline: none;
-  border-color: #4f46e5;
-}
-
-/* Button */
-.login-card button {
-  width: 100%;
-  padding: 12px;
-  background: #4f46e5;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
+.form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
   font-weight: 500;
+  color: #334155;
+}
+
+.form-field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 14px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #8b5e83;
+  box-shadow: 0 0 0 3px rgba(139, 94, 131, 0.25);
+}
+
+/* ===== BUTTON ===== */
+.login-card button {
+  width: 102%;
+  height: 44px;
+  margin-top: 10px;
+  border-radius: 9px;
+  border: none;
+  background: #8b5e83;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
 }
 
 .login-card button:hover {
-  background: #4338ca;
+  background: #7a516f;
+}
+
+.login-card button:active {
+  transform: translateY(1px);
 }

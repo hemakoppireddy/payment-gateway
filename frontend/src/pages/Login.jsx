@@ -10,7 +10,6 @@ export default function Login() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Deliverable 1: fixed merchant
     if (email === "test@example.com") {
       localStorage.setItem("api_key", "key_test_abc123");
       localStorage.setItem("api_secret", "secret_test_xyz789");
@@ -23,27 +22,35 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <h2>Merchant Login</h2>
-        <p className="subtitle">Payment Gateway Dashboard</p>
+        <header className="login-header">
+          <h1>Merchant Login</h1>
+          <p>Payment Gateway Dashboard</p>
+        </header>
 
         <form data-test-id="login-form" onSubmit={handleSubmit}>
-          <input
-            data-test-id="email-input"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="form-field">
+            <label>Email</label>
+            <input
+              data-test-id="email-input"
+              type="email"
+              placeholder="example@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          <input
-            data-test-id="password-input"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="form-field">
+            <label>Password</label>
+            <input
+              data-test-id="password-input"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
           <button data-test-id="login-button" type="submit">
             Login

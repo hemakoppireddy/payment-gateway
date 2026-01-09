@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "../services/api";
 import { Link } from "react-router-dom";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -10,88 +10,105 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-  async function fetchDashboardStats() {
-    try {
-      const payments = await fetch(
-        "http://localhost:8000/api/v1/payments",
-        {
-          headers: {
-            "X-Api-Key": "key_test_abc123",
-            "X-Api-Secret": "secret_test_xyz789"
+    async function fetchDashboardStats() {
+      try {
+        const payments = await fetch(
+          "http://localhost:8000/api/v1/payments",
+          {
+            headers: {
+              "X-Api-Key": "key_test_abc123",
+              "X-Api-Secret": "secret_test_xyz789"
+            }
           }
-        }
-      ).then(res => res.json());
+        ).then(res => res.json());
 
-      const totalTransactions = payments.length;
+        const totalTransactions = payments.length;
 
-      const successfulPayments = payments.filter(
-        p => p.status === "success"
-      );
+        const successfulPayments = payments.filter(
+          p => p.status === "success"
+        );
 
-      const totalAmount = successfulPayments.reduce(
-        (sum, p) => sum + p.amount,
-        0
-      );
+        const totalAmount = successfulPayments.reduce(
+          (sum, p) => sum + p.amount,
+          0
+        );
 
-      const successRate =
-        totalTransactions === 0
-          ? 0
-          : Math.round(
-              (successfulPayments.length / totalTransactions) * 100
-            );
+        const successRate =
+          totalTransactions === 0
+            ? 0
+            : Math.round(
+                (successfulPayments.length / totalTransactions) * 100
+              );
 
-      setStats({
-        totalTransactions,
-        totalAmount,
-        successRate
-      });
-    } catch (err) {
-      console.error("Failed to load dashboard stats", err);
+        setStats({
+          totalTransactions,
+          totalAmount,
+          successRate
+        });
+      } catch (err) {
+        console.error("Failed to load dashboard stats", err);
+      }
     }
-  }
 
-  fetchDashboardStats();
-}, []);
-
+    fetchDashboardStats();
+  }, []);
 
   return (
-    <div data-test-id="dashboard">
-      <h1>Dashboard</h1>
+    <div className="dashboard-page" data-test-id="dashboard">
+      <header className="dashboard-header">
+        <h1>Dashboard</h1>
+        <Link to="/dashboard/transactions" className="link">
+          View Transactions
+        </Link>
+      </header>
 
       {/* API Credentials */}
-      <div data-test-id="api-credentials">
-        <div>
+      <section className="card" data-test-id="api-credentials">
+        <h2>API Credentials</h2>
+
+        <div className="credential">
           <label>API Key</label>
           <span data-test-id="api-key">key_test_abc123</span>
         </div>
 
-        <div>
+        <div className="credential">
           <label>API Secret</label>
           <span data-test-id="api-secret">secret_test_xyz789</span>
         </div>
-      </div>
+      </section>
 
       {/* Stats */}
-      <div data-test-id="stats-container">
-        <div data-test-id="total-transactions">
-          {stats.totalTransactions}
+      <section className="stats" data-test-id="stats-container">
+        <div className="stat-card">
+          <span className="stat-label">Total Transactions</span>
+          <span
+            className="stat-value"
+            data-test-id="total-transactions"
+          >
+            {stats.totalTransactions}
+          </span>
         </div>
 
-        <div data-test-id="total-amount">
-          ₹{stats.totalAmount / 100}
+        <div className="stat-card">
+          <span className="stat-label">Total Amount</span>
+          <span
+            className="stat-value"
+            data-test-id="total-amount"
+          >
+            ₹{(stats.totalAmount / 100).toLocaleString()}
+          </span>
         </div>
 
-        <div data-test-id="success-rate">
-          {stats.successRate}%
+        <div className="stat-card">
+          <span className="stat-label">Success Rate</span>
+          <span
+            className="stat-value"
+            data-test-id="success-rate"
+          >
+            {stats.successRate}%
+          </span>
         </div>
-      </div>
-
-      {/* 🔹 OPTIONAL NAVIGATION LINK */}
-      <div style={{ marginTop: "20px" }}>
-        <Link to="/dashboard/transactions">
-          View Transactions
-        </Link>
-      </div>
+      </section>
     </div>
   );
 }
