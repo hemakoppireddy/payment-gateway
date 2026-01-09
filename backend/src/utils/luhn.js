@@ -1,21 +1,24 @@
 export function isValidCardNumber(cardNumber) {
-    const cleaned = cardNumber.replace(/[\s-]/g, "");
+  if (!cardNumber) return false;
 
-    if (!/^\d{13,19$/.test(cleaned)) return false;
+  const cleaned = cardNumber.replace(/[\s-]/g, "");
 
-    let sum = 0;
-    let shouldDouble = false;
+  if (!/^\d{13,19}$/.test(cleaned)) return false;
 
-    for(let i = cleaned.length-1; i>=0; i--){
-        let digit = parseInt(cleaned[i], 10);
+  let sum = 0;
+  let shouldDouble = false;
 
-        if(shouldDouble){
-            digit*=2;
-            if(digit > 9) digit -= 9;
-        }
-         sum += digit;
-         shouldDouble = !shouldDouble;
+  for (let i = cleaned.length - 1; i >= 0; i--) {
+    let digit = Number(cleaned[i]);
+
+    if (shouldDouble) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
     }
 
-     return sum % 10 === 0;
-    }
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+
+  return sum % 10 === 0;
+}
