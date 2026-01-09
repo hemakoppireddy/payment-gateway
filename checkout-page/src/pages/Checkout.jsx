@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../services/api";
+import "../styles/Checkout.css";
 
 export default function Checkout() {
+  const navigate = useNavigate();
+
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get("order_id");
 
@@ -11,11 +15,10 @@ export default function Checkout() {
 
   const [order, setOrder] = useState(null);
   const [method, setMethod] = useState(null);
-  const [paymentId, setPaymentId] = useState(null);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
-  // 🔹 Fetch order (public endpoint)
+  /* 🔹 Fetch order (PUBLIC endpoint – correct) */
   useEffect(() => {
     async function fetchOrder() {
       try {
@@ -31,12 +34,12 @@ export default function Checkout() {
     fetchOrder();
   }, [orderId]);
 
-  // 🔹 Poll payment status (AUTH REQUIRED)
-  function pollPayment(id) {
+  /* 🔹 Poll payment status */
+  function pollPayment(paymentId) {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/v1/payments/${id}`,
+          `http://localhost:8000/api/v1/payments/${paymentId}`,
           {
             headers: {
               "X-Api-Key": "key_test_abc123",
@@ -49,17 +52,27 @@ export default function Checkout() {
 
         if (data.status !== "processing") {
           clearInterval(interval);
-          setStatus(data.status);
+
+          if (data.status === "success") {
+            navigate(
+              `/checkout/success?payment_id=${paymentId}`
+            );
+          } else {
+            navigate(
+              `/checkout/failure?error=Payment failed`
+            );
+          }
         }
       } catch {
         clearInterval(interval);
-        setStatus("failed");
-        setError("Failed to fetch payment status");
+        navigate(
+          `/checkout/failure?error=Payment failed`
+        );
       }
     }, 2000);
   }
 
-  // 🔹 Handle UPI payment
+  /* 🔹 UPI Payment */
   async function handleUPIPay(e) {
     e.preventDefault();
     setStatus("processing");
@@ -78,7 +91,6 @@ export default function Checkout() {
         }
       );
 
-      setPaymentId(res.id);
       pollPayment(res.id);
     } catch (err) {
       setStatus("failed");
@@ -86,38 +98,48 @@ export default function Checkout() {
     }
   }
 
-  // 🔹 Handle Card payment
+  /* 🔹 Card Payment */
   async function handleCardPay(e) {
-    e.preventDefault();
-    setStatus("processing");
-    setError("");
+  e.preventDefault();
+  setStatus("processing");
+  setError("");
 
-    try {
-      const res = await apiFetch(
-        "/api/v1/payments/public",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            order_id: orderId,
-            method: "card",
-            card: {
-              number: e.target.number.value,
-              expiry_month: e.target.expiry.value.split("/")[0],
-              expiry_year: e.target.expiry.value.split("/")[1],
-              cvv: e.target.cvv.value,
-              holder_name: e.target.name.value
-            }
-          })
-        }
-      );
+  const rawNumber = e.target.number.value;
+  const cleanedNumber = rawNumber.replace(/\s+/g, ""); // ✅ FIX
 
-      setPaymentId(res.id);
-      pollPayment(res.id);
-    } catch (err) {
-      setStatus("failed");
-      setError(err.error?.description || "Payment failed");
-    }
+  const [month, year] = e.target.expiry.value.split("/");
+  const fullYear =
+    year.length === 2 ? `20${year}` : year;
+
+  try {
+    const res = await apiFetch(
+      "/api/v1/payments/public",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          order_id: orderId,
+          method: "card",
+          card: {
+            number: cleanedNumber,          // ✅ IMPORTANT
+            expiry_month: month,
+            expiry_year: fullYear,
+            cvv: e.target.cvv.value,
+            holder_name: e.target.name.value
+          }
+        })
+      }
+    );
+
+    pollPayment(res.id);
+  } catch (err) {
+    setStatus("failed");
+    setError(
+      err.error?.description || "Payment failed"
+    );
   }
+}
+
+
 
   if (!order) {
     return <div>Loading...</div>;
@@ -125,131 +147,123 @@ export default function Checkout() {
 
   return (
     <div data-test-id="checkout-container">
-      {/* Order Summary */}
-      <div data-test-id="order-summary">
-        <h2>Complete Payment</h2>
-        <div>
-          <span>Amount: </span>
-          <span data-test-id="order-amount">
-            ₹{order.amount / 100}
-          </span>
-        </div>
-        <div>
-          <span>Order ID: </span>
-          <span data-test-id="order-id">{order.id}</span>
-        </div>
-      </div>
+      <div className="checkout-card">
+        {/* Order Summary */}
+        <div data-test-id="order-summary">
+          <h2>Complete Payment</h2>
 
-      {/* Payment Methods */}
-      <div data-test-id="payment-methods">
-        <button
-          data-test-id="method-upi"
-          onClick={() => setMethod("upi")}
-        >
-          UPI
-        </button>
-
-        <button
-          data-test-id="method-card"
-          onClick={() => setMethod("card")}
-          style={{ marginLeft: "10px" }}
-        >
-          Card
-        </button>
-      </div>
-
-      {/* UPI Form */}
-      {method === "upi" && (
-        <form data-test-id="upi-form" onSubmit={handleUPIPay}>
-          <input
-            data-test-id="vpa-input"
-            name="vpa"
-            placeholder="username@bank"
-            required
-          />
-          <button data-test-id="pay-button" type="submit">
-            Pay ₹{order.amount / 100}
-          </button>
-        </form>
-      )}
-
-      {/* Card Form */}
-      {method === "card" && (
-        <form data-test-id="card-form" onSubmit={handleCardPay}>
-          <input
-            data-test-id="card-number-input"
-            name="number"
-            placeholder="Card Number"
-            required
-          />
-
-          <input
-            data-test-id="expiry-input"
-            name="expiry"
-            placeholder="MM/YY"
-            required
-          />
-
-          <input
-            data-test-id="cvv-input"
-            name="cvv"
-            placeholder="CVV"
-            required
-          />
-
-          <input
-            data-test-id="cardholder-name-input"
-            name="name"
-            placeholder="Name on Card"
-            required
-          />
-
-          <button data-test-id="pay-button" type="submit">
-            Pay ₹{order.amount / 100}
-          </button>
-        </form>
-      )}
-
-      {/* Processing */}
-      {status === "processing" && (
-        <div data-test-id="processing-state">
-          <span data-test-id="processing-message">
-            Processing payment...
-          </span>
-        </div>
-      )}
-
-      {/* Success */}
-      {status === "success" && (
-        <div data-test-id="success-state">
-          <h2>Payment Successful!</h2>
           <div>
-            <span>Payment ID: </span>
-            <span data-test-id="payment-id">{paymentId}</span>
+            <span>Amount: </span>
+            <span data-test-id="order-amount">
+              ₹{order.amount / 100}
+            </span>
           </div>
-          <span data-test-id="success-message">
-            Your payment has been processed successfully
-          </span>
-        </div>
-      )}
 
-      {/* Error */}
-      {status === "failed" && (
-        <div data-test-id="error-state">
-          <h2>Payment Failed</h2>
-          <span data-test-id="error-message">{error}</span>
+          <div>
+            <span>Order ID: </span>
+            <span data-test-id="order-id">
+              {order.id}
+            </span>
+          </div>
+        </div>
+
+        {/* Payment Methods */}
+        <div data-test-id="payment-methods">
           <button
-            data-test-id="retry-button"
-            onClick={() => {
-              setStatus("idle");
-              setError("");
-              setPaymentId(null);
-            }}
+            data-test-id="method-upi"
+            data-method="upi"
+            onClick={() => setMethod("upi")}
           >
-            Try Again
+            UPI
+          </button>
+
+          <button
+            data-test-id="method-card"
+            data-method="card"
+            onClick={() => setMethod("card")}
+          >
+            Card
           </button>
         </div>
-      )}
+
+        {/* UPI Form */}
+        {method === "upi" && (
+          <form
+            data-test-id="upi-form"
+            onSubmit={handleUPIPay}
+          >
+            <input
+              data-test-id="vpa-input"
+              name="vpa"
+              placeholder="username@bank"
+              required
+            />
+            <button
+              data-test-id="pay-button"
+              type="submit"
+            >
+              Pay ₹{order.amount / 100}
+            </button>
+          </form>
+        )}
+
+        {/* Card Form */}
+        {method === "card" && (
+          <form
+            data-test-id="card-form"
+            onSubmit={handleCardPay}
+          >
+            <input
+              data-test-id="card-number-input"
+              name="number"
+              placeholder="Card Number"
+              required
+            />
+            <input
+              data-test-id="expiry-input"
+              name="expiry"
+              placeholder="MM/YY"
+              required
+            />
+            <input
+              data-test-id="cvv-input"
+              name="cvv"
+              placeholder="CVV"
+              required
+            />
+            <input
+              data-test-id="cardholder-name-input"
+              name="name"
+              placeholder="Name on Card"
+              required
+            />
+            <button
+              data-test-id="pay-button"
+              type="submit"
+            >
+              Pay ₹{order.amount / 100}
+            </button>
+          </form>
+        )}
+
+        {/* Processing */}
+        {status === "processing" && (
+          <div data-test-id="processing-state">
+            <span data-test-id="processing-message">
+              Processing payment...
+            </span>
+          </div>
+        )}
+
+        {/* Error */}
+        {status === "failed" && (
+          <div data-test-id="error-state">
+            <span data-test-id="error-message">
+              {error}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

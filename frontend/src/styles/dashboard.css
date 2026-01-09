@@ -1,15 +1,24 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+}
+
 /* ===== PAGE ===== */
 .dashboard-page {
   min-height: 100vh;
   background: #f2f4f7;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  padding: 40px 0;
+
+  /* IMPORTANT: allow scrolling */
+  overflow-x: hidden;
+  padding: 24px 16px;
 }
 
-/* ===== MAIN CONTAINER ===== */
+/* ===== CONTAINER ===== */
 .dashboard-header,
 .card,
 .stats {
+  width: 100%;
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
@@ -20,25 +29,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin-bottom: 28px;
 }
 
 .dashboard-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 26px;
   color: #914c84;
 }
 
 /* Button */
 .link {
   background-color: #914c84;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 10px;
   font-size: 14px;
   text-decoration: none;
   color: #ffffff;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .link:hover {
@@ -49,8 +59,8 @@
 .card {
   background: #ffffff;
   border-radius: 14px;
-  padding: 28px;
-  margin-bottom: 36px;
+  padding: 24px;
+  margin-bottom: 28px;
   box-shadow:
     0 10px 22px rgba(16, 24, 40, 0.08),
     0 1px 2px rgba(16, 24, 40, 0.04);
@@ -58,7 +68,7 @@
 
 .card h2 {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   font-size: 18px;
   color: #8b5e83;
 }
@@ -67,7 +77,7 @@
 .credential {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .credential label {
@@ -83,20 +93,22 @@
   border-radius: 10px;
   font-size: 14px;
   color: #111827;
+
+  /* allow wrapping on small screens */
+  word-break: break-all;
 }
 
 /* ===== STATS ===== */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  padding: 0 24px;
+  gap: 20px;
 }
 
 .stat-card {
   background: #ffffff;
   border-radius: 14px;
-  padding: 28px 20px;
+  padding: 22px 18px;
   text-align: center;
   box-shadow:
     0 8px 18px rgba(16, 24, 40, 0.06);
@@ -106,24 +118,37 @@
   display: block;
   font-size: 13px;
   color: #6b7280;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: #914c84;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablets */
 @media (max-width: 900px) {
   .stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
+/* Mobile */
+@media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+    align-items: stretch;
+  }
+
+  .link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
   }
 }
