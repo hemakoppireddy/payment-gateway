@@ -45,6 +45,7 @@ cd payment-gateway
 
 # Start all services
 docker-compose up -d --build
+```
 
 
 ## Access URLs
@@ -52,7 +53,7 @@ docker-compose up -d --build
 | Service | URL |
 |--------|-----|
 | Merchant Dashboard | http://localhost:3000 |
-| Checkout Page | http://localhost:3001 |
+| Checkout Page | http://localhost:3001/checkout?order_id=ORDER_ID |
 | Backend API | http://localhost:8000 |
 | Health Check | http://localhost:8000/health |
 
@@ -78,6 +79,7 @@ Use these credentials for all authenticated API requests and dashboard access.
 ```text
 user@paytm
 test@phonepe
+```
 
 ### Card (Visa – Recommended)
 
@@ -86,6 +88,7 @@ Card Number: 4111 1111 1111 1111
 Expiry: 12/26
 CVV: 123
 Name: Test User
+```
 
 
 ## Project Structure
@@ -181,6 +184,7 @@ TEST_API_SECRET=secret_test_xyz789
 TEST_MODE=false
 TEST_PAYMENT_SUCCESS=true
 TEST_PROCESSING_DELAY=1000
+```
 
 A sample file is provided as `.env.example`.
 
@@ -228,3 +232,4 @@ Expected response:
   "database": "connected",
   "timestamp": "..."
 }
+```
